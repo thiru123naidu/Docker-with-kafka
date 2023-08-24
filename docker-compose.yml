@@ -1,0 +1,28 @@
+version: '2'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_CLIENT_TIME: 2000
+    ports:
+        - 22181:2181
+
+    
+  
+  kafka:
+    image: confluentinc/cp-kafka:5.3.1
+    depends_on:
+      - zookeeper
+   
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      #KAFKA_LISTENERS: EXTERNAL_SAME_HOST://:29092,INTERNAL://:9092
+      KAFKA_ADVERTISED_LISTENERS: PLANINTEXT://kafka:9092,EXTERNAL_SAME_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP:   PLANINTEXT:PLAINTEXT,EXTERNAL_SAME_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLANINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+     
